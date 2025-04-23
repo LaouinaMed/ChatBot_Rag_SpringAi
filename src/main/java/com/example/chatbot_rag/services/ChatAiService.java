@@ -1,6 +1,8 @@
 package com.example.chatbot_rag.services;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
@@ -21,7 +23,9 @@ public class ChatAiService {
     private Resource promptResource;
 
     public ChatAiService(ChatClient.Builder builder,VectorStore vectorStore){
-        this.chatClient = builder.build();
+        this.chatClient = builder
+                .defaultAdvisors(new MessageChatMemoryAdvisor(new InMemoryChatMemory()))
+                .build();
         this.vectorStore = vectorStore;
 
     }
